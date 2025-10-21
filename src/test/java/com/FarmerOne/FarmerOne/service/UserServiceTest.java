@@ -76,14 +76,14 @@ class UserServiceTest {
     void loginUser_Success() {
         // Arrange
         LoginRequest loginRequest = new LoginRequest();
-        loginRequest.setEmail("john@example.com");
+        loginRequest.setMobileNumber("1234567890");
         loginRequest.setPassword("password123");
 
         User user = new User();
-        user.setEmail("john@example.com");
+        user.setMobileNumber("1234567890");
         user.setPassword("encodedPassword");
 
-        when(userRepository.findByEmail("john@example.com")).thenReturn(Optional.of(user));
+        when(userRepository.findByMobileNumber("1234567890")).thenReturn(Optional.of(user));
         when(passwordEncoder.matches("password123", "encodedPassword")).thenReturn(true);
 
         // Act
@@ -98,31 +98,31 @@ class UserServiceTest {
     void loginUser_InvalidEmail() {
         // Arrange
         LoginRequest loginRequest = new LoginRequest();
-        loginRequest.setEmail("nonexistent@example.com");
+        loginRequest.setMobileNumber("1234567890");
         loginRequest.setPassword("password123");
 
-        when(userRepository.findByEmail("nonexistent@example.com")).thenReturn(Optional.empty());
+        when(userRepository.findByMobileNumber("1234567890")).thenReturn(Optional.empty());
 
         // Act
         AuthResponse response = userService.loginUser(loginRequest);
 
         // Assert
         assertFalse(response.isSuccess());
-        assertEquals("Invalid email or password", response.getMessage());
+        assertEquals("Invalid mobile number or password", response.getMessage());
     }
 
     @Test
     void loginUser_InvalidPassword() {
         // Arrange
         LoginRequest loginRequest = new LoginRequest();
-        loginRequest.setEmail("john@example.com");
+        loginRequest.setMobileNumber("1234567890");
         loginRequest.setPassword("wrongPassword");
 
         User user = new User();
-        user.setEmail("john@example.com");
+        user.setMobileNumber("1234567890");
         user.setPassword("encodedPassword");
 
-        when(userRepository.findByEmail("john@example.com")).thenReturn(Optional.of(user));
+        when(userRepository.findByMobileNumber("1234567890")).thenReturn(Optional.of(user));
         when(passwordEncoder.matches("wrongPassword", "encodedPassword")).thenReturn(false);
 
         // Act
@@ -130,6 +130,6 @@ class UserServiceTest {
 
         // Assert
         assertFalse(response.isSuccess());
-        assertEquals("Invalid email or password", response.getMessage());
+        assertEquals("Invalid mobile number or password", response.getMessage());
     }
 }
