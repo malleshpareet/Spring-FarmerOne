@@ -1,7 +1,9 @@
 package com.FarmerOne.FarmerOne.controller;
 
 import com.FarmerOne.FarmerOne.dto.CategoryDTO;
+import com.FarmerOne.FarmerOne.dto.ProductDTO;
 import com.FarmerOne.FarmerOne.service.CategoryService;
+import com.FarmerOne.FarmerOne.service.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -17,6 +19,9 @@ public class CategoryController {
     
     @Autowired
     private CategoryService categoryService;
+    
+    @Autowired
+    private ProductService productService;
     
     // Get all categories
     @GetMapping
@@ -97,5 +102,12 @@ public class CategoryController {
             response.put("message", "Category not found");
             return new ResponseEntity<>(response, HttpStatus.NOT_FOUND);
         }
+    }
+    
+    // Get products by category ID
+    @GetMapping("/{categoryId}/products")
+    public ResponseEntity<List<ProductDTO>> getProductsByCategoryId(@PathVariable String categoryId) {
+        List<ProductDTO> products = productService.getProductsByCategoryId(categoryId);
+        return new ResponseEntity<>(products, HttpStatus.OK);
     }
 }
