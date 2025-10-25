@@ -1,0 +1,16 @@
+spring:
+  data:
+    mongodb:
+      uri: mongodb+srv://malleshpareet_db_user:3C9X7hqK2UKl61yi@farmerone.k8o0nuo.mongodb.net/farmerone?retryWrites=true&w=majority&appName=FarmerOne
+      database: farmerone
+      
+logging:
+  level:
+    org.springframework.data.mongodb.core.MongoTemplate: DEBUG
+    
+server:
+  error:
+    include-message: always
+    include-binding-errors: always
+    include-stacktrace: on_param
+    include-exception: true
