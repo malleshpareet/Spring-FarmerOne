@@ -12,7 +12,7 @@
 #
 # # Run the jar
 # ENTRYPOINT ["java", "-jar", "app.jar"]
-FROM maven:3.9.5-openjdk-21 as build
+FROM eclipse-temurin:17-jdk as build
 COPY . .
 RUN mvn clean package -DskipTests
 
