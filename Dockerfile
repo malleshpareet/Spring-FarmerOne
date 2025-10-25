@@ -16,7 +16,6 @@ FROM eclipse-temurin:17-jdk as build
 COPY . .
 RUN mvn clean package -DskipTests
 
-FROM openjdk:21-jdk-slim-bullseye
 COPY --from=build /target/FarmerOne-0.0.1-SNAPSHOT.jar FarmerOne.jar
 EXPOSE 8080
 ENTRYPOINT ["java", "-jar", "FarmerOne.jar"]
