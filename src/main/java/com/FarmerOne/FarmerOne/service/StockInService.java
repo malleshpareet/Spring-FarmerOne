@@ -47,7 +47,7 @@ public class StockInService {
         stockInDTO.setTransportCharge(stockIn.getTransportCharge());
         stockInDTO.setLoadingCharge(stockIn.getLoadingCharge());
         stockInDTO.setLaborCharge(stockIn.getLaborCharge());
-        stockInDTO.setTotalCharges(stockIn.getTotalCharges());
+//        stockInDTO.setTotalCharges(stockIn.getTotalCharges());
         return stockInDTO;
     }
     
