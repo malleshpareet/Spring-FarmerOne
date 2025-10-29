@@ -1,8 +1,10 @@
 package com.FarmerOne.FarmerOne.service;
 
 import com.FarmerOne.FarmerOne.dto.BuyerDTO;
+import com.FarmerOne.FarmerOne.exception.MediatorNotFoundException;
 import com.FarmerOne.FarmerOne.model.Buyer;
 import com.FarmerOne.FarmerOne.repository.BuyerRepository;
+import com.FarmerOne.FarmerOne.repository.ProfileRepository;
 import com.FarmerOne.FarmerOne.util.CustomIdGenerator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -15,6 +17,9 @@ public class BuyerService {
     
     @Autowired
     private BuyerRepository buyerRepository;
+    
+    @Autowired
+    private ProfileRepository profileRepository;
     
     @Autowired
     private CustomIdGenerator idGenerator;
@@ -68,6 +73,12 @@ public class BuyerService {
     
     // Create new buyer
     public BuyerDTO createBuyer(BuyerDTO buyerDTO) {
+        // Validate that the mediator exists
+        if (buyerDTO.getMediatorId() != null && 
+            !profileRepository.existsById(buyerDTO.getMediatorId())) {
+            throw new MediatorNotFoundException("No mediator available for this id");
+        }
+        
         // Generate custom ID if not provided
         if (buyerDTO.getId() == null) {
             buyerDTO.setId(idGenerator.generateNextId());
@@ -82,6 +93,12 @@ public class BuyerService {
     public BuyerDTO updateBuyer(String id, BuyerDTO buyerDTO) {
         Optional<Buyer> existingBuyer = buyerRepository.findById(id);
         if (existingBuyer.isPresent()) {
+            // Validate that the mediator exists
+            if (buyerDTO.getMediatorId() != null && 
+                !profileRepository.existsById(buyerDTO.getMediatorId())) {
+                throw new MediatorNotFoundException("No mediator available for this id");
+            }
+            
             Buyer buyer = convertToEntity(buyerDTO);
             buyer.setId(id); // Ensure ID remains the same
             Buyer updatedBuyer = buyerRepository.save(buyer);

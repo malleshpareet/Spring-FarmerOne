@@ -11,4 +11,5 @@ public interface FarmerRepository extends MongoRepository<Farmer, String> {
     Optional<Farmer> findByMobileNumber(String mobileNumber);
     Optional<Farmer> findByFarmerCode(String farmerCode);
     List<Farmer> findByMediatorId(String mediatorId); // Changed from UUID to String
+    boolean existsById(String id);
 }

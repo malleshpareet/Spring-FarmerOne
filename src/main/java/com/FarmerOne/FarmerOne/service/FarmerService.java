@@ -1,8 +1,10 @@
 package com.FarmerOne.FarmerOne.service;
 
 import com.FarmerOne.FarmerOne.dto.FarmerDTO;
+import com.FarmerOne.FarmerOne.exception.MediatorNotFoundException;
 import com.FarmerOne.FarmerOne.model.Farmer;
 import com.FarmerOne.FarmerOne.repository.FarmerRepository;
+import com.FarmerOne.FarmerOne.repository.ProfileRepository;
 import com.FarmerOne.FarmerOne.util.CustomIdGenerator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -15,6 +17,9 @@ public class FarmerService {
     
     @Autowired
     private FarmerRepository farmerRepository;
+    
+    @Autowired
+    private ProfileRepository profileRepository;
     
     @Autowired
     private CustomIdGenerator idGenerator;
@@ -70,6 +75,12 @@ public class FarmerService {
     
     // Create new farmer
     public FarmerDTO createFarmer(FarmerDTO farmerDTO) {
+        // Validate that the mediator exists
+        if (farmerDTO.getMediatorId() != null && 
+            !profileRepository.existsById(farmerDTO.getMediatorId())) {
+            throw new MediatorNotFoundException("No mediator available for this id");
+        }
+        
         // Generate custom ID if not provided
         if (farmerDTO.getId() == null) {
             farmerDTO.setId(idGenerator.generateNextId());
@@ -84,6 +95,12 @@ public class FarmerService {
     public FarmerDTO updateFarmer(String id, FarmerDTO farmerDTO) {
         Optional<Farmer> existingFarmer = farmerRepository.findById(id);
         if (existingFarmer.isPresent()) {
+            // Validate that the mediator exists
+            if (farmerDTO.getMediatorId() != null && 
+                !profileRepository.existsById(farmerDTO.getMediatorId())) {
+                throw new MediatorNotFoundException("No mediator available for this id");
+            }
+            
             Farmer farmer = convertToEntity(farmerDTO);
             farmer.setId(id); // Ensure ID remains the same
             Farmer updatedFarmer = farmerRepository.save(farmer);

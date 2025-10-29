@@ -39,36 +39,26 @@ public class ProfileController {
     // Create new profile
     @PostMapping
     public ResponseEntity<?> createProfile(@RequestBody ProfileDTO profileDTO) {
-        try {
-            ProfileDTO createdProfile = profileService.createProfile(profileDTO);
-            Map<String, Object> response = new HashMap<>();
-            response.put("status", "success");
-            response.put("id", createdProfile.getId());
-            response.put("message", "User profile created successfully");
-            return new ResponseEntity<>(response, HttpStatus.CREATED);
-        } catch (RuntimeException e) {
-            // Let the GlobalExceptionHandler handle DuplicateProfileException
-            throw e;
-        }
+        ProfileDTO createdProfile = profileService.createProfile(profileDTO);
+        Map<String, Object> response = new HashMap<>();
+        response.put("status", "success");
+        response.put("id", createdProfile.getId());
+        response.put("message", "User profile created successfully");
+        return new ResponseEntity<>(response, HttpStatus.CREATED);
     }
     
     // Update profile
     @PutMapping("/{id}")
     public ResponseEntity<?> updateProfile(@PathVariable String id, @RequestBody ProfileDTO profileDTO) {
-        try {
-            ProfileDTO updatedProfile = profileService.updateProfile(id, profileDTO);
-            if (updatedProfile != null) {
-                Map<String, Object> response = new HashMap<>();
-                response.put("status", "success");
-                response.put("id", updatedProfile.getId());
-                response.put("message", "User profile updated successfully");
-                return new ResponseEntity<>(response, HttpStatus.OK);
-            } else {
-                return new ResponseEntity<>("Profile not found", HttpStatus.NOT_FOUND);
-            }
-        } catch (RuntimeException e) {
-            // Let the GlobalExceptionHandler handle DuplicateProfileException
-            throw e;
+        ProfileDTO updatedProfile = profileService.updateProfile(id, profileDTO);
+        if (updatedProfile != null) {
+            Map<String, Object> response = new HashMap<>();
+            response.put("status", "success");
+            response.put("id", updatedProfile.getId());
+            response.put("message", "User profile updated successfully");
+            return new ResponseEntity<>(response, HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>("Profile not found", HttpStatus.NOT_FOUND);
         }
     }
     
